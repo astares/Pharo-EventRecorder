@@ -46,6 +46,39 @@ HandMorphForReplay >> pauseEventRecorderIn: aWorld [
 	^eventRecorder pause
 ]
 
+{ #category : #'event handling' }
+HandMorphForReplay >> processEvents [
+	"Play back the next event"
+
+	| evt hadMouse hadAny |
+	hadMouse := hadAny := false.
+	[(evt := eventRecorder nextEventToPlay) isNil] whileFalse: 
+			[evt type == #EOF 
+				ifTrue: 
+					[eventRecorder pause.
+					^self].
+			evt type == #startSound 
+				ifTrue: 
+					[evt argument play.
+					eventRecorder synchronize.
+					^self].
+			evt isMouse ifTrue: [hadMouse := true].
+			(evt isMouse or: [evt isKeyboard]) 
+				ifTrue: 
+					[self handleEvent: (evt setHand: self) resetHandlerFields.
+					hadAny := true]].
+	(mouseClickState notNil and: [hadMouse not]) 
+		ifTrue: 
+			["No mouse events during this cycle. Make sure click states time out accordingly"
+
+			mouseClickState handleEvent: lastMouseEvent asMouseMove from: self].
+	hadAny 
+		ifFalse: 
+			["No pending events. Make sure z-order is up to date"
+
+			self mouseOverHandler processMouseOver: lastMouseEvent]
+]
+
 { #category : #drawing }
 HandMorphForReplay >> restoreSavedPatchOn: aCanvas [ 
 	"In Squeak, if the hand had user information (which HandMorphForReplay always does), the method would just draw and return, 	 	skipping the transition to hardware cursor (see HandMorph>>#restoreSavedPatchOn:. Since in Pharo, hands don't have user 	info, we can't use that trick, so we just copied the first part of HandMorph's implementation"
@@ -53,6 +86,24 @@ HandMorphForReplay >> restoreSavedPatchOn: aCanvas [
 	savedPatch ifNotNil: [ aCanvas drawImage: savedPatch at: savedPatch offset ].
 	
 	
+]
+
+{ #category : #cursor }
+HandMorphForReplay >> showTemporaryCursor: cursorOrNil hotSpotOffset: hotSpotOffset [
+	"When I show my cursor, it appears double size,
+	unless it is a form such as a paint brush."
+
+	cursorOrNil
+	ifNil: ["Setting cursor to nil cannot revert to hardware cursor -- just show normal."
+			^ self showTemporaryCursor: Cursor normal hotSpotOffset: Cursor normal offset]
+	ifNotNil:
+		[(cursorOrNil isKindOf: Cursor)
+			ifTrue: ["Show cursors magnified for visibility"
+					^ super showTemporaryCursor:
+									(CursorWithMask derivedFrom: (cursorOrNil magnifyBy: 2))
+				 				hotSpotOffset: (cursorOrNil offset negated*2) + hotSpotOffset]
+			ifFalse: [^ super showTemporaryCursor: cursorOrNil
+				 				hotSpotOffset: hotSpotOffset]]
 ]
 
 { #category : #copying }
