@@ -7,7 +7,10 @@ Class {
 	#instVars : [
 		'tape',
 		'state',
-		'world'
+		'world',
+		'recHand',
+		'lastEvent',
+		'time'
 	],
 	#category : #'EventRecorder-Core-Model'
 }
@@ -43,6 +46,18 @@ EventRecorder >> canStop [
 EventRecorder >> defaultWorld [
 
 	^ActiveWorld
+]
+
+{ #category : #'private - recording' }
+EventRecorder >> handleListenEvent: anEvent [
+	"Record the given event"
+	(self isRecording and: [anEvent hand == recHand]) ifFalse:[^self].
+	
+	anEvent = lastEvent ifTrue: [^ self].
+	anEvent isEscapeKey ifTrue: [^ self stop].
+	time := anEvent timeStamp.
+	tape append: (anEvent copy setHand: nil).	 
+	lastEvent := anEvent.
 ]
 
 { #category : #testing }
@@ -118,9 +133,22 @@ EventRecorder >> play [
 
 { #category : #commands }
 EventRecorder >> record [
+self inspect.
+	self isPausedRecording ifFalse: [ 
+		tape := EventTape new.
+	].
+	
+	self startRecording
+]
 
-	state := RecordingEvents new.
- 
+{ #category : #'private - recording' }
+EventRecorder >> startRecording [
+	
+	recHand := self world activeHand ifNil: [self world primaryHand].
+	recHand newKeyboardFocus: self world.
+	recHand addEventListener: self.
+	
+	state := RecordingEvents new.	
 ]
 
 { #category : #accessing }
