@@ -10,7 +10,11 @@ Class {
 		'world',
 		'recHand',
 		'lastEvent',
-		'time'
+		'time',
+		'deltaTime',
+		'playHand',
+		'tapeStream',
+		'lastDelta'
 	],
 	#category : #'EventRecorder-Core-Model'
 }
@@ -128,17 +132,35 @@ EventRecorder >> pause [
 
 { #category : #commands }
 EventRecorder >> play [
-	state := ReplayingEvents new
+
+	self startPlaying
 ]
 
 { #category : #commands }
 EventRecorder >> record [
-self inspect.
+ 
 	self isPausedRecording ifFalse: [ 
 		tape := EventTape new.
 	].
 	
 	self startRecording
+]
+
+{ #category : #'private - recording' }
+EventRecorder >> startPlaying [
+	
+	playHand := HandMorphForReplay forRecorder: self.
+	playHand position: tape startingPosition.
+	self world addHand: playHand.
+	playHand newKeyboardFocus: self world.
+	
+	tapeStream := tape tapeStream.
+	lastEvent := nil.
+	lastDelta := 0@0.
+	
+	state := ReplayingEvents new.
+		
+	self synchronize
 ]
 
 { #category : #'private - recording' }
@@ -149,6 +171,8 @@ EventRecorder >> startRecording [
 	recHand addEventListener: self.
 	
 	state := RecordingEvents new.	
+		
+	self synchronize
 ]
 
 { #category : #accessing }
@@ -160,10 +184,22 @@ EventRecorder >> stateDescription [
 { #category : #commands }
 EventRecorder >> stop [
 
-	self isPlaying 
-		ifTrue: [ state := StoppedPlaying new ].
-	self isRecording 
-		ifTrue: [ state := StoppedRecording new ]		
+	self isPlaying ifTrue: [ 
+		state := StoppedPlaying new 
+	].
+		
+	self isRecording ifTrue: [ 
+		recHand removeEventListener: self.
+		recHand := nil.
+		state := StoppedRecording new.		
+	]		
+]
+
+{ #category : #'event handling' }
+EventRecorder >> synchronize [
+
+	time := Time millisecondClockValue.
+	deltaTime := nil.
 ]
 
 { #category : #accessing }

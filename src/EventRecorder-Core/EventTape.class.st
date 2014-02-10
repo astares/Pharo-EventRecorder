@@ -42,3 +42,15 @@ EventTape >> initialize [
 	super initialize.
 	events := OrderedCollection new.
 ]
+
+{ #category : #accessing }
+EventTape >> startingPosition [
+
+	^ self tapeStream peek position.
+]
+
+{ #category : #accessing }
+EventTape >> tapeStream [
+
+	^ ReadStream on: self events.
+]
