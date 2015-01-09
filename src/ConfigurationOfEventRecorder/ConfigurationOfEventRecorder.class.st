@@ -124,7 +124,26 @@ ConfigurationOfEventRecorder >> baseline01: spec [
 				spec requires: #('EventRecorder-Core' ). ].
 		spec 
 			group: 'Core' with: #('EventRecorder-Core' );
-			group: 'Tests' with: #(#'EventRecorder-Tests-Core' ). ].
+			group: 'Tests' with: #(#'EventRecorder-Tests-Core' );
+			group: 'default' with: #('Core' 'default' ). ].
+
+]
+
+{ #category : #baselines }
+ConfigurationOfEventRecorder >> baseline02: spec [
+	<version: '0.2-baseline'>
+
+	spec for: #'common' do: [
+		spec blessing: #'baseline'.
+		spec repository: 'http://smalltalkhub.com/mc/TorstenBergmann/EventRecorder/main/'.
+		spec 
+			package: 'EventRecorder-Core';
+			package: #'EventRecorder-Tests-Core' with: [
+				spec requires: #('EventRecorder-Core' ). ].
+		spec 
+			group: 'Core' with: #('EventRecorder-Core' );
+			group: 'Tests' with: #(#'EventRecorder-Tests-Core' );
+			group: 'default' with: #('Core' 'default' ). ].
 
 ]
 
@@ -140,7 +159,7 @@ ConfigurationOfEventRecorder >> customProjectAttributes [
 ConfigurationOfEventRecorder >> development: spec [
 	<symbolicVersion: #'development'>
 
-	spec for: #'common' version: '0.1-baseline'.
+	spec for: #'common' version: '0.2-baseline'.
 
 ]
 
@@ -161,7 +180,21 @@ ConfigurationOfEventRecorder >> project [
 ConfigurationOfEventRecorder >> stable: spec [
 	<symbolicVersion: #'stable'>
 
-	"Until we are really stable just use the baseline"
-	spec for: #'common' version: '0.1-baseline'.
+	spec for: #'common' version: '0.1'.
+
+]
+
+{ #category : #versions }
+ConfigurationOfEventRecorder >> version01: spec [
+	<version: '0.1' imports: #('0.1-baseline' )>
+
+	spec for: #'common' do: [
+		spec blessing: #'stable'.
+		spec description: 'version 0.1'.
+		spec author: 'TorstenBergmann'.
+		spec timestamp: '1/9/2015 23:24'.
+		spec 
+			package: 'EventRecorder-Core' with: 'EventRecorder-Core-TorstenBergmann.5';
+			package: #'EventRecorder-Tests-Core' with: 'EventRecorder-Tests-Core-TorstenBergmann.1'. ].
 
 ]
