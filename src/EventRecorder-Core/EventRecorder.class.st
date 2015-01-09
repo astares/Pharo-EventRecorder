@@ -222,7 +222,10 @@ EventRecorder >> stateDescription [
 EventRecorder >> stop [
 
 	self isPlaying ifTrue: [ 
-		state := StoppedPlaying new 
+		state := StoppedPlaying new.
+		playHand delete.
+		self world removeHand: playHand.
+		playHand := nil
 	].
 		
 	self isRecording ifTrue: [ 
@@ -230,6 +233,8 @@ EventRecorder >> stop [
 		recHand := nil.
 		state := StoppedRecording new.		
 	]		
+	
+
 ]
 
 { #category : #'event handling' }
