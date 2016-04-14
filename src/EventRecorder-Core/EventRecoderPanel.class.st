@@ -10,7 +10,9 @@ Class {
 		'stopModel',
 		'pauseModel',
 		'recordModel',
-		'descriptionModel'
+		'descriptionModel',
+		'importModel',
+		'exportModel'
 	],
 	#classVars : [
 		'Icon'
@@ -21,17 +23,20 @@ Class {
 { #category : #specs }
 EventRecoderPanel class >> defaultSpec [
 	<spec: #default>
-	
-	^ SpecLayout composed		
-		newRow: [ :row |
-			row 
+	^ SpecColumnLayout composed
+		newRow: [ :row | 
+			row
 				add: #playModel;
 				add: #stopModel;
 				add: #pauseModel;
-				add: #recordModel
-				 ] height: self toolbarHeight;
-			add: #descriptionModel top: 30;
-		yourself
+				add: #recordModel ]
+			height: self toolbarHeight;
+		add: #descriptionModel height: self toolbarHeight;
+		newRow: [ :row | 
+			row
+				add: #importModel;
+				add: #exportModel ]
+			height: self toolbarHeight yourself
 ]
 
 { #category : #'private - icon handling' }
@@ -85,10 +90,22 @@ EventRecoderPanel >> descriptionModel [
 	^descriptionModel
 ]
 
+{ #category : #accessing }
+EventRecoderPanel >> exportModel [
+
+	^exportModel
+]
+
+{ #category : #accessing }
+EventRecoderPanel >> importModel [
+
+	^importModel
+]
+
 { #category : #defaults }
 EventRecoderPanel >> initialExtent [
 
-	^300@30
+	^300@150
 ]
 
 { #category : #initialization }
@@ -99,6 +116,9 @@ EventRecoderPanel >> initializeWidgets [
 	recordModel := self newButton.
 	pauseModel := self newButton.
 	descriptionModel := self newLabel.
+	
+	importModel := self newButton.
+	exportModel := self newButton.
 	
 	self update
 ]
@@ -133,6 +153,32 @@ EventRecoderPanel >> setDescriptionModel [
 	
 	descriptionModel
 		label: self model stateDescription
+]
+
+{ #category : #'private - initialization' }
+EventRecoderPanel >> setExportModel [
+	exportModel
+		enabled: self model canExport;
+		label: 'Export...';
+		icon: Smalltalk ui icons smallSaveAs;
+		action: [ (UIManager default fileSave: 'Export to .ston file' extensions: #('ston'))
+				ifNotNil: [ :file | 
+					file
+						ensureDelete;
+						writeStreamDo: [ :stream | stream nextPutAll: self model export ].
+					self notify: 'Exported to' , file name ] ]
+]
+
+{ #category : #'private - initialization' }
+EventRecoderPanel >> setImportModel [
+	importModel
+		enabled: self model canImport;
+		label: 'Import...';
+		icon: Smalltalk ui icons smallOpen;
+		action: [ (UIManager default fileOpen: 'Export to .ston file' extensions: #('ston'))
+				ifNotNil: [ :stream | 
+					self model import: stream contents.
+					self update ] ]
 ]
 
 { #category : #'private - initialization' }
@@ -191,5 +237,7 @@ EventRecoderPanel >> update [
 		setPlayModel;
 		setStopModel;
 		setRecordModel;
-		setPauseModel
+		setPauseModel;
+		setImportModel;
+		setExportModel
 ]

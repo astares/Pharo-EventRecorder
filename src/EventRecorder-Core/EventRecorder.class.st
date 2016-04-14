@@ -20,6 +20,18 @@ Class {
 }
 
 { #category : #testing }
+EventRecorder >> canExport [
+
+	^self hasNothingRecordedYet not and: [ self isRecording not ]
+]
+
+{ #category : #testing }
+EventRecorder >> canImport [
+	
+	^self isRecording not or: [ self isPlaying not ]
+]
+
+{ #category : #testing }
 EventRecorder >> canPause [
 
 	^self isRecording 
@@ -52,6 +64,11 @@ EventRecorder >> defaultWorld [
 	^ActiveWorld
 ]
 
+{ #category : #'import/export' }
+EventRecorder >> export [
+	^ STON toStringPretty: tape
+]
+
 { #category : #'private - recording' }
 EventRecorder >> handleListenEvent: anEvent [
 	"Record the given event"
@@ -74,6 +91,12 @@ EventRecorder >> hasNothingRecordedYet [
 EventRecorder >> hasState: aState [
 
 	^state class = aState  
+]
+
+{ #category : #'import/export' }
+EventRecorder >> import: aStonSerialization [
+	tape := STON fromString: aStonSerialization.
+	state := StoppedRecording new
 ]
 
 { #category : #initialization }
