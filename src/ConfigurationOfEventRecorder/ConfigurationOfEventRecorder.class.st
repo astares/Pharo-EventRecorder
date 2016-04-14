@@ -194,7 +194,7 @@ ConfigurationOfEventRecorder >> version01: spec [
 		spec author: 'TorstenBergmann'.
 		spec timestamp: '1/9/2015 23:24'.
 		spec 
-			package: 'EventRecorder-Core' with: 'EventRecorder-Core-TorstenBergmann.5';
+			package: 'EventRecorder-Core' with: 'EventRecorder-Core-TorstenBergmann.7';
 			package: #'EventRecorder-Tests-Core' with: 'EventRecorder-Tests-Core-TorstenBergmann.1'. ].
 
 ]
