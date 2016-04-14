@@ -26,17 +26,19 @@ EventRecoderPanel class >> defaultSpec [
 	^ SpecColumnLayout composed
 		newRow: [ :row | 
 			row
+				add: #importModel;
+				add: #exportModel ]
+			height: self toolbarHeight; 	
+		newRow: [ :row | 
+			row
 				add: #playModel;
 				add: #stopModel;
 				add: #pauseModel;
 				add: #recordModel ]
-			height: self toolbarHeight;
-		add: #descriptionModel height: self toolbarHeight;
-		newRow: [ :row | 
-			row
-				add: #importModel;
-				add: #exportModel ]
-			height: self toolbarHeight yourself
+			height: self toolbarHeight;		
+		 
+			
+			yourself
 ]
 
 { #category : #'private - icon handling' }
@@ -85,12 +87,6 @@ EventRecoderPanel class >> open [
 ]
 
 { #category : #accessing }
-EventRecoderPanel >> descriptionModel [
-
-	^descriptionModel
-]
-
-{ #category : #accessing }
 EventRecoderPanel >> exportModel [
 
 	^exportModel
@@ -105,20 +101,18 @@ EventRecoderPanel >> importModel [
 { #category : #defaults }
 EventRecoderPanel >> initialExtent [
 
-	^300@150
+	^355@95
 ]
 
 { #category : #initialization }
 EventRecoderPanel >> initializeWidgets [
+	importModel := self newButton.
+	exportModel := self newButton.
 	
 	playModel := self newButton.
 	stopModel := self newButton.
 	recordModel := self newButton.
 	pauseModel := self newButton.
-	descriptionModel := self newLabel.
-	
-	importModel := self newButton.
-	exportModel := self newButton.
 	
 	self update
 ]
@@ -150,9 +144,7 @@ EventRecoderPanel >> recordModel [
 
 { #category : #'private - initialization' }
 EventRecoderPanel >> setDescriptionModel [
-	
-	descriptionModel
-		label: self model stateDescription
+	self title: 'Event Recorder - ', self model stateDescription
 ]
 
 { #category : #'private - initialization' }
@@ -224,6 +216,11 @@ EventRecoderPanel >> setStopModel [
 				self update ].
 ]
 
+{ #category : #'private - initialization' }
+EventRecoderPanel >> setTitle [
+	self title: 'Event Recorder - ', self model stateDescription
+]
+
 { #category : #accessing }
 EventRecoderPanel >> stopModel [
 
@@ -233,7 +230,7 @@ EventRecoderPanel >> stopModel [
 { #category : #'private - initialization' }
 EventRecoderPanel >> update [
 	self 
-		setDescriptionModel;
+		setTitle;
 		setPlayModel;
 		setStopModel;
 		setRecordModel;

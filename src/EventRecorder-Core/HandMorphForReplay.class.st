@@ -56,6 +56,7 @@ HandMorphForReplay >> processEvents [
 			[evt type == #EOF 
 				ifTrue: 
 					[eventRecorder pause.
+					World removeHand: self.
 					^self].
 			evt type == #startSound 
 				ifTrue: 
@@ -76,7 +77,9 @@ HandMorphForReplay >> processEvents [
 		ifFalse: 
 			["No pending events. Make sure z-order is up to date"
 
-			self mouseOverHandler processMouseOver: lastMouseEvent]
+			self mouseOverHandler processMouseOver: lastMouseEvent.
+			
+			]
 ]
 
 { #category : #drawing }

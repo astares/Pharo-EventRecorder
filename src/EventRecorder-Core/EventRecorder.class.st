@@ -220,7 +220,8 @@ EventRecorder >> startPlaying [
 	
 	state := ReplayingEvents new.
 		
-	self synchronize
+	self synchronize.
+
 ]
 
 { #category : #'private - recording' }
