@@ -32,6 +32,36 @@ ConfigurationOfEventRecorder class >> baseConfigurationClassIfAbsent: aBlock [
 
 ]
 
+{ #category : #catalog }
+ConfigurationOfEventRecorder class >> catalogChangeLog [
+	"Returns a paragraph describing the most important changes in the configuration class."
+	^ ' '
+]
+
+{ #category : #catalog }
+ConfigurationOfEventRecorder class >> catalogContactInfo [
+	"Returns a paragraph describing contact information such as email, mailing lists and website."
+	^ 'You can reach the author on the Pharo mailinglist (http://lists.pharo.org)'
+]
+
+{ #category : #catalog }
+ConfigurationOfEventRecorder class >> catalogDescription [
+	"Returns a paragraph describing the project"
+	^ 'Record and replay screen events.'
+]
+
+{ #category : #catalog }
+ConfigurationOfEventRecorder class >> catalogKeyClassesAndExample [
+	"Returns a paragraph or more describing the key classes of your project. You can use Pillar/Pier syntax to layout out the text i.e., ==Code== and - for bullet."
+	^ ' '
+]
+
+{ #category : #catalog }
+ConfigurationOfEventRecorder class >> catalogKeywords [
+	"Returns an array of symbols"
+	^ #(screen recording) 
+]
+
 { #category : #private }
 ConfigurationOfEventRecorder class >> ensureMetacello [
 
