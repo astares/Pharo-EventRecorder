@@ -153,12 +153,12 @@ EventRecoderPanel >> setExportModel [
 		enabled: self model canExport;
 		label: 'Export...';
 		icon: Smalltalk ui icons smallSaveAs;
-		action: [ (UIManager default fileSave: 'Export to .ston file' extensions: #('ston'))
+		action: [ (UIManager default chooseForSaveFileReference: 'Export to .ston file' extensions: #('ston') path: Smalltalk imageFile path)
 				ifNotNil: [ :file | 
 					file
 						ensureDelete;
 						writeStreamDo: [ :stream | stream nextPutAll: self model export ].
-					self notify: 'Exported to' , file name ] ]
+					self inform: 'Exported to ' , file fullName ] ]  
 ]
 
 { #category : #'private - initialization' }
@@ -167,7 +167,7 @@ EventRecoderPanel >> setImportModel [
 		enabled: self model canImport;
 		label: 'Import...';
 		icon: Smalltalk ui icons smallOpen;
-		action: [ (UIManager default fileOpen: 'Export to .ston file' extensions: #('ston'))
+		action: [ (UIManager default chooseExistingFileReference: 'Import from .ston file' extensions: #('ston') path: Smalltalk imageFile path)
 				ifNotNil: [ :stream | 
 					self model import: stream contents.
 					self update ] ]
