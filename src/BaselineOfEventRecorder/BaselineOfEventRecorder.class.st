@@ -20,7 +20,7 @@ BaselineOfEventRecorder >> baseline: spec [
 			"Groups"	
 			spec	
 				group: 'Core' with: #('EventRecorder-Core');
-				group: 'Tests' with: #('EventRecorderTests');
+				group: 'Tests' with: #('EventRecorder-Core-Tests');
 				group: 'all' with: #('Core' 'Tests');
 				group: 'default' with: #('all')	
 	]
