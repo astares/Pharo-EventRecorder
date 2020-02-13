@@ -177,6 +177,18 @@ ConfigurationOfEventRecorder >> baseline02: spec [
 
 ]
 
+{ #category : #baselines }
+ConfigurationOfEventRecorder >> baseline03: spec [
+	<version: '0.3-baseline'>
+
+	spec for: #'common' do: [ 
+		spec
+			baseline: 'EventRecorder' with: [ 
+				spec 
+					className: 'BaselineOfEventRecorder';
+					repository: 'github://astares/Pharo-EventRecorder:master/src' ]]
+]
+
 { #category : #accessing }
 ConfigurationOfEventRecorder >> customProjectAttributes [
 	 "Edit to return a collection of any custom attributes e.g. for conditional loading: Array with: #'Condition1' with: #'Condition2.
@@ -189,7 +201,7 @@ ConfigurationOfEventRecorder >> customProjectAttributes [
 ConfigurationOfEventRecorder >> development: spec [
 	<symbolicVersion: #'development'>
 
-	spec for: #'common' version: '0.2-baseline'.
+	spec for: #'common' version: '0.3-baseline'.
 
 ]
 
@@ -210,7 +222,7 @@ ConfigurationOfEventRecorder >> project [
 ConfigurationOfEventRecorder >> stable: spec [
 	<symbolicVersion: #'stable'>
 
-	spec for: #'common' version: '0.1'.
+	spec for: #'common' version: '0.2'.
 
 ]
 
@@ -227,4 +239,16 @@ ConfigurationOfEventRecorder >> version01: spec [
 			package: 'EventRecorder-Core' with: 'EventRecorder-Core-TorstenBergmann.7';
 			package: #'EventRecorder-Tests-Core' with: 'EventRecorder-Tests-Core-TorstenBergmann.1'. ].
 
+]
+
+{ #category : #versions }
+ConfigurationOfEventRecorder >> version02: spec [
+	<version: '0.2'>
+
+	spec for: #'common' do: [ 
+		spec
+			baseline: 'EventRecorder' with: [ 
+				spec 
+					className: 'BaselineOfEventRecorder';
+					repository: 'github://astares/Pharo-EventRecorder:0.2/src' ]]
 ]
