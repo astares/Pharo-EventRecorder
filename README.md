@@ -10,3 +10,10 @@ Metacello new
 	baseline: 'EventRecorder';
 	load
 ```
+
+
+# Video
+## Old
+
+[![Watch the video](https://img.youtube.com/vi/HZIDs0mukpM/hqdefault.jpg)](https://www.youtube.com/watch?v=HZIDs0mukpM)
+
